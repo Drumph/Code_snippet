@@ -1,23 +1,27 @@
 #! Rscript --vanilla --default-packages=utils
+args <- commandArgs()
+bim_file=args[7]
+fam_file=args[9]
+bed_file=args[11]
+gds_file=args[13]
+kin0_file=args[15]
+kin_file=args[17]
 library(GWASTools, lib.loc="~/R/x86_64-pc-linux-gnu-library/3.3/")
-###Read in Barbados genotype data for PCAs
-#biocLite("SNPRelate")
 library("gdsfmt", lib.loc="~/R/x86_64-pc-linux-gnu-library/3.3/")
 library("SNPRelate", lib.loc="~/R/x86_64-pc-linux-gnu-library/3.3/")
 library("SeqVarTools", lib.loc="~/R/x86_64-pc-linux-gnu-library/3.3/")
 library("GENESIS", lib.loc="~/R/x86_64-pc-linux-gnu-library/3.3/")
-snpgdsBED2GDS(bed.fn = "Topmed4_OMNI_Common_chr1-22_clean_data_998_MAF_LD_updated_ids.bed", bim.fn = "Topmed4_OMNI_Common_chr1-22_clean_data_998_MAF_LD_updated_ids.bim", fam.fn ="Topmed4_OMNI_Common_chr1-22_clean_data_998_MAF_LD_updated_ids.fam", out.gdsfn = "Topmed4_OMNI_Common_chr1-22_clean_data_998_MAF_LD_updated_ids.gds")
-file.kin0="Topmed4_OMNI_Common_chr1-22_clean_data_998_MAF_LD_updated_ids.kin0"
-file.kin="Topmed4_OMNI_Common_chr1-22_clean_data_998_MAF_LD_updated_ids.kin"
-geno <- GdsGenotypeReader(filename = "Topmed4_OMNI_Common_chr1-22_clean_data_998_MAF_LD_updated_ids.gds")
+snpgdsBED2GDS(bed.fn = bed_file, bim.fn = bim_file, fam.fn =bed_file, out.gdsfn = gds_file)
+file.kin0=kin0_file
+file.kin=kin_file
+geno <- GdsGenotypeReader(filename = gds_file)
 genoData <- GenotypeData(geno)
 iids <- getScanID(genoData)
 ###Run PC analysis
 Kingmat <- king2mat(file.kin0=file.kin0,file.kin=file.kin,type="kinship",iids = iids)
 mypcair <- pcair(genoData = genoData,kinMat = Kingmat,divMat = Kingmat)
 mypcrel <- pcrelate(genoData = genoData, pcMat = mypcair$vectors[,1:2],training.set = mypcair$unrels)
-fam=read.delim("Topmed4_OMNI_Common_chr1-22_clean_data_998_MAF_LD_updated_ids.fam",sep=" ",header=F)
-#pheno=read.delim("../TOPMED_PHENOTYPES-3.txt",header=T)
+fam=read.delim(fam_file,header=F)
 pheno=read.delim("analysis_phenotypes.txt",header=T)
 k1=merge(fam,pheno,by.x=c("V2"),by.y=c("SAMPLE"))
 pheno.tmp = k1[match(fam$V2,k1$V2),]
