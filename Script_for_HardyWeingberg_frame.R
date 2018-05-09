@@ -1,7 +1,7 @@
 Rscript --vanilla --default-packages=utils
 args <- commandArgs()
-path_file=args[7]
-file_name=args[9]
+path_file=args[7] ######## Path where the files are stored
+file_name=args[9] ######## This file contains the chromosome number of specific sub population
 file_list=list.files(path=path_file,pattern = "\\.hwe")
 filenames1=file1[grep(pattern=file_name,file_list)]
 split_data_hwe <- function(x){
