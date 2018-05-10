@@ -2,9 +2,9 @@ Rscript --vanilla --default-packages=utils
 args <- commandArgs()
 path_file=args[7] ######## Path where the files are stored
 file_name=args[9] ######## This file name contains the chromosome number to be used
-file_list=list.files(path=path_file,pattern = "\\.hwe") ##### list of all files ending with ".hwe" extension
+file_list=list.files(path=path_file,pattern = "\\.hwe")
 filenames1=file1[grep(pattern=file_name,file_list)]     ###### grepping only specific chromosome
-col_names=do.call(rbind, strsplit(filenames1, '\\_'))[,7] ###### getting the specific population name to used as colname later
+col_names=do.call(rbind, strsplit(filenames1, '\\_'))[,7] ###### getting the specific population name to used as column name later
 Pval_cols=paste0("P_",gsub(".","_",col_names,fixed=T))
 
 split_data_hwe <- function(x){
