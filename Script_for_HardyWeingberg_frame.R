@@ -1,7 +1,7 @@
 Rscript --vanilla --default-packages=utils
 args <- commandArgs()
 path_file=args[7] ######## Path where the files are stored
-file_name=args[9] ######## This file contains the chromosome number of specific sub population
+file_name=args[9] ######## This file name contains the chromosome number to be used
 file_list=list.files(path=path_file,pattern = "\\.hwe") ##### list of all files ending with ".hwe" extension
 filenames1=file1[grep(pattern=file_name,file_list)]     ###### grepping only specific chromosome
 col_names=do.call(rbind, strsplit(filenames1, '\\_'))[,7] ###### getting the specific population name to used as colname later
@@ -16,8 +16,8 @@ split_data_hwe <- function(x){
 datalist1 = lapply(filenames1, function(x){split_data_hwe(x)}) #### Creating a list of dataframes
 r1=Reduce(function(x,y) {merge(x,y,by=c("CHR","SNP"))}, datalist1) ##### Merging the list of dataframe 
 colnames(r1)[3:(length(filenames1)+2)]= Pval_cols #### pasting the  specific colnames for each population
-r1[((length(filenames1)+2)+1):((length(filenames1)*2)+2)][r1[3:(length(filenames1)+2)]>0.000001]=0  #### Extending the dataframe with zero's for hwe values less than "0.000001" 
-r1[((length(filenames1)+2)+1):((length(filenames1)*2)+2)][r1[3:(length(filenames1)+2)]<=0.000001]=1 ###Extending the dataframe with ones' for hwe values more than "0.000001" 
+r1[((length(filenames1)+2)+1):((length(filenames1)*2)+2)][r1[3:(length(filenames1)+2)]>0.000001]=0  
+r1[((length(filenames1)+2)+1):((length(filenames1)*2)+2)][r1[3:(length(filenames1)+2)]<=0.000001]=1
 colnames(r1)[((length(filenames1)+2)+1):((length(filenames1)*2)+2)]= Pval_cols
 r1$TRUTH="F"
 r1$TRUTH[rowSums(r1[((length(filenames1)+2)+1):((length(filenames1)*2)+2)])==0]="T" #### if the rowsums aren't summing to zero that means the snp is failed in specific population
