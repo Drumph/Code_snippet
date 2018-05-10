@@ -5,3 +5,4 @@
 
 ## Script_genesis_null_model.R
 * This script was used to create a null model for cases/control phenotype in Barbados Asthma studies
+* The input of to this script will be SNP's QCied i.e snp which failed HWE, missingness and frequency filtered data and then LD pruned plink binary data.
